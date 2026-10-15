@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Warsztaty</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { display: flex; flex-direction: column; gap: 10px; max-width: 400px; }
+        #wynik { margin-top: 15px; padding: 10px; background: #eee; white-space: pre-line; }
+    </style>
+</head>
+<body>
+
+    <form id="formularz">
+        <label for="imie">Imię i nazwisko:</label>
+        <input type="text" id="imie">
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email">
+
+        <label for="warsztat">Warsztat:</label>
+        <select id="warsztat">
+            <option value="">Wybierz...</option>
+            <option value="web">Strony WWW</option>
+            <option value="python">Python</option>
+            <option value="bazy">Bazy danych</option>
+        </select>
+
+        <fieldset>
+            <legend>Poziom:</legend>
+            <label><input type="radio" name="poziom" value="poczatkujacy"> Początkujący</label>
+            <label><input type="radio" name="poziom" value="zaawansowany"> Zaawansowany</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Zainteresowania (max 3):</legend>
+            <label><input type="checkbox" name="zainteresowania" value="frontend"> Frontend</label>
+            <label><input type="checkbox" name="zainteresowania" value="backend"> Backend</label>
+            <label><input type="checkbox" name="zainteresowania" value="grafika"> Grafika</label>
+        </fieldset>
+
+        <label><input type="checkbox" id="zgoda"> Zgoda na regulamin</label>
+
+        <button type="submit">Wyślij</button>
+    </form>
+
+    <div id="wynik"></div>
+
+    <script>
+        document.getElementById("formularz").addEventListener("submit", e => {
+            e.preventDefault();
+            
+            const imie = document.getElementById("imie").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const warsztat = document.getElementById("warsztat").value;
+            const poziom = document.querySelector('input[name="poziom"]:checked');
+            const zaint = Array.from(document.querySelectorAll('input[name="zainteresowania"]:checked')).map(p => p.value);
+            const zgoda = document.getElementById("zgoda").checked;
+            const wynik = document.getElementById("wynik");
+
+            if (!imie) return wynik.textContent = "Podaj imię!";
+            if (!email) return wynik.textContent = "Podaj e-mail!";
+            if (!warsztat) return wynik.textContent = "Wybierz warsztat!";
+            if (!poziom) return wynik.textContent = "Wybierz poziom!";
+            if (zaint.length === 0 || zaint.length > 3) return wynik.textContent = "Zaznacz 1-3 zainteresowania!";
+            if (!zgoda) return wynik.textContent = "Musisz wyrazić zgodę!";
+
+            wynik.textContent = `Zgłoszenie poprawne!\nImię: ${imie}\nE-mail: ${email}\nWarsztat: ${warsztat}\nPoziom: ${poziom.value}\nZainteresowania: ${zaint.join(", ")}`;
+        });
+    </script>
+
+</body>
+</html>
